@@ -19,7 +19,6 @@
  */
 package org.mitre.oauth2.service.impl;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -141,27 +140,15 @@ public class DefaultSystemScopeService implements SystemScopeService {
 		}
 	}
 
-    @Override
-    public Set<SystemScope> fromStrings(Set<String> scope) {
-        Set<SystemScope> allScopes = repository.getAll();
-        return fromStrings(allScopes, scope);
-    }
-
 	/* (non-Javadoc)
 	 * @see org.mitre.oauth2.service.SystemScopeService#fromStrings(java.util.Set)
 	 */
 	@Override
-	public Set<SystemScope> fromStrings(Set<SystemScope> allScopes, Set<String> scope) {
+	public Set<SystemScope> fromStrings(Set<String> scope) {
 		if (scope == null) {
 			return null;
 		} else {
-		    return new LinkedHashSet<>(Collections2.filter(allScopes, 
-		                                                   new Predicate<SystemScope>() {
-		                                                            @Override
-		                                                            public boolean apply(SystemScope input) {
-		                                                                return scope.contains(input.getValue());
-		                                                   }}));
-
+			return new LinkedHashSet<>(Collections2.filter(Collections2.transform(scope, stringToSystemScope), Predicates.notNull()));
 		}
 	}
 
@@ -183,19 +170,8 @@ public class DefaultSystemScopeService implements SystemScopeService {
 	@Override
 	public boolean scopesMatch(Set<String> expected, Set<String> actual) {
 
-	    Set<SystemScope> allScopes = repository.getAll();
-	    Collection<SystemScope> ex = Collections2.filter(allScopes, new Predicate<SystemScope>() {
-	        @Override
-	        public boolean apply(SystemScope input) {
-	            return expected.contains(input.getValue());
-            }
-	    });
-	    Collection<SystemScope> act = Collections2.filter(allScopes, new Predicate<SystemScope>() {
-	        @Override
-	        public boolean apply(SystemScope input) {
-	            return actual.contains(input.getValue());
-            }
-	    });
+		Set<SystemScope> ex = fromStrings(expected);
+		Set<SystemScope> act = fromStrings(actual);
 
 		for (SystemScope actScope : act) {
 			// first check to see if there's an exact match

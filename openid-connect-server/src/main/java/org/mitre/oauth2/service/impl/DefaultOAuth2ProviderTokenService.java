@@ -351,13 +351,12 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
 
 		// get the stored scopes from the authentication holder's authorization request; these are the scopes associated with the refresh token
 		Set<String> refreshScopesRequested = new HashSet<>(refreshToken.getAuthenticationHolder().getAuthentication().getOAuth2Request().getScope());
-		Set<SystemScope> allScopes = scopeService.getAll();
-		Set<SystemScope> refreshScopes = scopeService.fromStrings(allScopes, refreshScopesRequested);
+		Set<SystemScope> refreshScopes = scopeService.fromStrings(refreshScopesRequested);
 		// remove any of the special system scopes
 		refreshScopes = scopeService.removeReservedScopes(refreshScopes);
 
 		Set<String> scopeRequested = authRequest.getScope() == null ? new HashSet<String>() : new HashSet<>(authRequest.getScope());
-		Set<SystemScope> scope = scopeService.fromStrings(allScopes, scopeRequested);
+		Set<SystemScope> scope = scopeService.fromStrings(scopeRequested);
 
 		// remove any of the special system scopes
 		scope = scopeService.removeReservedScopes(scope);

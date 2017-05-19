@@ -42,8 +42,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.eclipse.persistence.annotations.JoinFetch;
-import org.eclipse.persistence.annotations.JoinFetchType;
 import org.mitre.oauth2.model.convert.SerializableStringConverter;
 import org.mitre.oauth2.model.convert.SimpleGrantedAuthorityStringConverter;
 import org.springframework.security.core.GrantedAuthority;
@@ -138,7 +136,6 @@ public class AuthenticationHolderEntity {
 	/**
 	 * @return the userAuth
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "user_auth_id")
 	public SavedUserAuthentication getUserAuth() {
@@ -155,7 +152,6 @@ public class AuthenticationHolderEntity {
 	/**
 	 * @return the authorities
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="authentication_holder_authority",
@@ -177,7 +173,6 @@ public class AuthenticationHolderEntity {
 	/**
 	 * @return the resourceIds
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="authentication_holder_resource_id",
@@ -230,7 +225,6 @@ public class AuthenticationHolderEntity {
 	/**
 	 * @return the responseTypes
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="authentication_holder_response_type",
@@ -251,7 +245,6 @@ public class AuthenticationHolderEntity {
 	/**
 	 * @return the extensions
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="authentication_holder_extension",
@@ -290,7 +283,6 @@ public class AuthenticationHolderEntity {
 	/**
 	 * @return the scope
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="authentication_holder_scope",

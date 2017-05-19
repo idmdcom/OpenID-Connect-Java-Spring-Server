@@ -86,9 +86,7 @@ public interface SystemScopeService {
 	 * @param scope
 	 * @return
 	 */
-	public Set<SystemScope> fromStrings(Set<String> scopes);
-
-	public Set<SystemScope> fromStrings(Set<SystemScope> allScopes, Set<String> scopes);
+	public Set<SystemScope> fromStrings(Set<String> scope);
 
 	/**
 	 * Pluck the scope values from the set of SystemScope objects and return a list of strings

@@ -47,8 +47,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.eclipse.persistence.annotations.JoinFetch;
-import org.eclipse.persistence.annotations.JoinFetchType;
 import org.mitre.oauth2.model.convert.JWEAlgorithmStringConverter;
 import org.mitre.oauth2.model.convert.JWEEncryptionMethodStringConverter;
 import org.mitre.oauth2.model.convert.JWKSetStringConverter;
@@ -430,7 +428,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the scope
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_scope",
@@ -452,7 +449,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the authorizedGrantTypes
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_grant_type",
@@ -482,7 +478,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the authorities
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_authority",
@@ -533,7 +528,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the registeredRedirectUri
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_redirect_uri",
@@ -563,7 +557,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the resourceIds
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@Override
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
@@ -640,7 +633,6 @@ public class ClientDetailsEntity implements ClientDetails {
 		this.subjectType = subjectType;
 	}
 
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_contact",
@@ -855,7 +847,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the responseTypes
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_response_type",
@@ -876,7 +867,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the defaultACRvalues
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_default_acr_value",
@@ -913,7 +903,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the postLogoutRedirectUri
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_post_logout_redirect_uri",
@@ -934,7 +923,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the requestUris
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_request_uri",
@@ -995,7 +983,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	/**
 	 * @return the claimsRedirectUris
 	 */
-	@JoinFetch(JoinFetchType.OUTER)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="client_claims_redirect_uri",

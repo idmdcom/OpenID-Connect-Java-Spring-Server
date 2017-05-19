@@ -16,6 +16,9 @@
  *******************************************************************************/
 package org.mitre.oauth2.service.impl;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,6 +52,8 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -185,6 +190,15 @@ public class TestDefaultOAuth2ProviderTokenService {
 		Mockito.when(scopeService.removeReservedScopes(Matchers.anySet())).then(AdditionalAnswers.returnsFirstArg());
 		Mockito.when(scopeService.removeRestrictedAndReservedScopes(Matchers.anySet())).then(AdditionalAnswers.returnsFirstArg());
 
+		Set<String> allScopes = new HashSet<String>(scope);
+		Collections.addAll(allScopes, "address", "phone");
+		Set<SystemScope> allSystemScopes = new HashSet<SystemScope>(Collections2.transform(allScopes, new Function<String, SystemScope>() {
+            @Override
+            public SystemScope apply(String input) {
+                return new SystemScope(input);
+            }
+        }));
+		Mockito.when(scopeService.getAll()).thenReturn(allSystemScopes);
 		Mockito.when(tokenEnhancer.enhance(Matchers.any(OAuth2AccessTokenEntity.class), Matchers.any(OAuth2Authentication.class)))
 		.thenAnswer(new Answer<OAuth2AccessTokenEntity>(){
 			@Override
@@ -194,6 +208,22 @@ public class TestDefaultOAuth2ProviderTokenService {
 			}
 		});
 
+		Mockito.when(scopeService.fromStrings(Matchers.anySet(), Matchers.anySet())).then(new Answer<Set<SystemScope>>() {
+
+            @Override
+            public Set<SystemScope> answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                Set<SystemScope> input = (Set<SystemScope>) args[0];
+                Set<String> requestedScopes = (Set<String>) args[1];
+                Set<SystemScope> output = new HashSet<>();
+                for (SystemScope systemScope : input) {
+                    if (requestedScopes.contains(systemScope.getValue())) {
+                        output.add(systemScope);
+                    }
+                }
+                return output;
+            }});
+            
 		Mockito.when(tokenRepository.saveAccessToken(Matchers.any(OAuth2AccessTokenEntity.class)))
 		.thenAnswer(new Answer<OAuth2AccessTokenEntity>() {
 			@Override
@@ -476,6 +506,9 @@ public class TestDefaultOAuth2ProviderTokenService {
 		tokenRequest.setScope(moreScope);
 
 		service.refreshAccessToken(refreshTokenValue, tokenRequest);
+		
+	    Mockito.verify(scopeService, Mockito.times(1)).getAll();
+
 	}
 
 	/**

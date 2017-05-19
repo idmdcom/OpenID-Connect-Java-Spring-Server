@@ -170,10 +170,10 @@ public class TestDefaultSystemScopeService {
 	@Test
 	public void scopesMatch() {
 
-		Set<String> expected = Sets.newHashSet("foo", "bar", "baz");
-		Set<String> actualGood = Sets.newHashSet("foo", "baz", "bar");
-		Set<String> actualGood2 = Sets.newHashSet("foo", "bar");
-		Set<String> actualBad = Sets.newHashSet("foo", "bob", "bar");
+		Set<String> expected = Sets.newHashSet(defaultDynScope1String, defaultDynScope2String, defaultScope1String);
+		Set<String> actualGood = Sets.newHashSet(defaultDynScope1String, defaultDynScope2String, defaultScope1String);
+		Set<String> actualGood2 = Sets.newHashSet(defaultDynScope1String, defaultScope1String);
+		Set<String> actualBad = Sets.newHashSet(defaultDynScope1String, defaultScope2String, defaultScope1String);
 
 		// same scopes, different order
 		assertThat(service.scopesMatch(expected, actualGood), is(true));

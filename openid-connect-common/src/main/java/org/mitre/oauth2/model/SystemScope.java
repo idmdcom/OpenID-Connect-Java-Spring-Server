@@ -20,6 +20,7 @@
 package org.mitre.oauth2.model;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,17 +28,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
+
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 
 /**
  * @author jricher
  *
  */
+@Cacheable(true)
+@Cache(expiry = 30000)
 @Entity
 @Table(name = "system_scope")
 @NamedQueries({
 	@NamedQuery(name = SystemScope.QUERY_ALL, query = "select s from SystemScope s ORDER BY s.id"),
-	@NamedQuery(name = SystemScope.QUERY_BY_VALUE, query = "select s from SystemScope s WHERE s.value = :" + SystemScope.PARAM_VALUE)
+	@NamedQuery(name = SystemScope.QUERY_BY_VALUE, query = "select s from SystemScope s WHERE s.value = :" + SystemScope.PARAM_VALUE,
+	            hints = {@QueryHint(name = QueryHints.QUERY_RESULTS_CACHE, value=HintValues.TRUE),
+	                     @QueryHint(name = QueryHints.QUERY_RESULTS_CACHE_EXPIRY, value = "30000")
+	            })
 })
 public class SystemScope {
 

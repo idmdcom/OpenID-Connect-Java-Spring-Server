@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -42,11 +43,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.eclipse.persistence.annotations.Cache;
 import org.mitre.oauth2.model.convert.JWEAlgorithmStringConverter;
 import org.mitre.oauth2.model.convert.JWEEncryptionMethodStringConverter;
 import org.mitre.oauth2.model.convert.JWKSetStringConverter;
@@ -63,15 +66,22 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jwt.JWT;
 
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 /**
  * @author jricher
  *
  */
+@Cacheable(true)
+@Cache(expiry = 30000)
 @Entity
 @Table(name = "client_details")
 @NamedQueries({
 	@NamedQuery(name = ClientDetailsEntity.QUERY_ALL, query = "SELECT c FROM ClientDetailsEntity c"),
-	@NamedQuery(name = ClientDetailsEntity.QUERY_BY_CLIENT_ID, query = "select c from ClientDetailsEntity c where c.clientId = :" + ClientDetailsEntity.PARAM_CLIENT_ID)
+	@NamedQuery(name = ClientDetailsEntity.QUERY_BY_CLIENT_ID, query = "select c from ClientDetailsEntity c where c.clientId = :" + ClientDetailsEntity.PARAM_CLIENT_ID,
+	            hints= {@QueryHint(name = QueryHints.QUERY_RESULTS_CACHE, value = HintValues.TRUE),
+	                    @QueryHint(name = QueryHints.QUERY_RESULTS_CACHE_EXPIRY, value = "30000")
+	            })
 })
 public class ClientDetailsEntity implements ClientDetails {
 

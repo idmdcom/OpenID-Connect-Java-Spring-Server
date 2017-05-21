@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -42,12 +43,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.eclipse.persistence.annotations.Cache;
 import org.mitre.oauth2.model.convert.SerializableStringConverter;
 import org.mitre.oauth2.model.convert.SimpleGrantedAuthorityStringConverter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 
+@Cacheable(true)
+@Cache(expiry = 30000)
 @Entity
 @Table(name = "authentication_holder")
 @NamedQueries ({
